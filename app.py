@@ -1,7 +1,6 @@
 # doing necessary imports
 
 from flask import Flask, render_template, request,jsonify
-# from flask_cors import CORS,cross_origin
 import requests
 from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen as uReq
@@ -32,11 +31,7 @@ def index():
             prod_html = bs(prodRes.text, "html.parser") # parsing the product page as HTML
             commentboxes = prod_html.find_all('div', {'class': "col _2wzgFH"}) # finding the HTML section containing the customer comments
 
-            # table = db[searchString] # creating a collection with the same name as search string. Tables and Collections are analogous.
-            #filename = searchString+".csv" #  filename to save the details
-            #fw = open(filename, "w") # creating a local file to save the details
-            #headers = "Product, Customer Name, Rating, Heading, Comment \n" # providing the heading of the columns
-            #fw.write(headers) # writing first the headers to file
+ 
             reviews = [] # initializing an empty list for reviews
             #  iterating over the comment section to get the details of customer and their comments
             for commentbox in commentboxes:
@@ -67,10 +62,10 @@ def index():
 
                 except:
                     custComment = 'No Customer Comment'
-                #fw.write(searchString+","+name.replace(",", ":")+","+rating + "," + commentHead.replace(",", ":") + "," + custComment.replace(",", ":") + "\n")
+                
                 mydict = {"Product": searchString, "Name": name, "Rating": rating, "CommentHead": commentHead,
                           "Comment": custComment} # saving that detail to a dictionary
-                # x = table.insert_one(mydict) #insertig the dictionary containing the rview comments to the collection
+                
                 reviews.append(mydict) #  appending the comments to the review list
             return render_template('results.html', reviews=reviews) # showing the review to the user
         except:
